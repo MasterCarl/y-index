@@ -1,4 +1,4 @@
-const db = require('./db');
+const api = require('./api');
 
 const fs = require('fs');
 const parse = require('csv-parse');
@@ -16,15 +16,24 @@ function processCsv(path, processRecord) {
 		});
 }
 
-/*
-const schools = db.collection('schools');
+
 processCsv('/Users/carl/Downloads/OpenDataNorderstedt/Daten/01_Schulen.csv',
-	csvrow => schools.doc(csvrow.IDENT).set({
+	csvrow => api.addRecord('venue', {
+		type: 'school',
 		name: csvrow.BEZEICH,
 		address: csvrow.LAGE,
 		city: csvrow.ORT,
-		type: csvrow.SCHULTYP,
+		type_detail: csvrow.SCHULTYP,
 		location: {x: csvrow.X, y: csvrow.Y}
-	})
+	}).catch(console.error)
 );
-*/
+
+processCsv('/Users/carl/Downloads/OpenDataNorderstedt/Daten/02_Kitas.csv',
+	csvrow => api.addRecord('venue', {
+		type: 'kita',
+		name: csvrow.BEZEICH,
+		address: csvrow.LAGE,
+		city: csvrow.ORT,
+		location: {x: csvrow.X, y: csvrow.Y}
+	}).catch(console.error)
+);

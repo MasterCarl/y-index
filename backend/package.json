@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "dependencies": {
+    "axios": "^0.18.0",
     "csv": "^4.0.0",
-    "firebase-admin": "^6.2.0"
+    "firebase-admin": "^6.2.0",
+    "minio": "^7.0.1",
+    "request": "^2.88.0"
   }
 }

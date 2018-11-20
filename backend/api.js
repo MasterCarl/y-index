@@ -1,53 +1,62 @@
-const db = require('./db');
+const axios = require('axios');
+
+async function queryTable(table, arguments) {
+	try {
+		const response = await axios.get(`http://mastercarl.com:3000/${table}${arguments || ''}`);
+		return response.data;
+	} catch (e) {
+		console.error(e);
+	}
+}
+
+async function addRecord(table, record) {
+	return await axios.post(`http://mastercarl.com:3000/${table}`, record).catch(console.error);
+}
+
+module.exports = {queryTable, addRecord};
+
+//queryTable('venue').then(console.log);
 
 // issue relating to
-function createIssue(id, title, comments = []) {
-	const doc = db.collection('issues').doc(id);
-	doc.set({title, comments});
+
+function createContent(type, venue, picture_url, text, location) {
+	return addRecord(
+			'venue_content',
+			{type, venue, picture_url, text, location}
+		);
 }
 
-function addCommentToIssue(issueId, comment) {
-	const docRef = db.collection('issues').doc(issueId);
-	docRef.get().then(doc => {
-		const comments = doc.data().comments;
-		comments.push(comment);
-		docRef.update({comments});
+const createIssue = createContent.bind(this, 'issue');
+
+function addCommentToIssue(issueId, comment, author) {
+	return addRecord('comment', {referenced: issueId, comment, author});
+}
+
+async function getContentForVenue(id) {
+	const content = await queryTable('venue_content', `?venue=eq.${id}`);
+	const grouped = content.reduce(function (r, c) {
+		r[c.type] = r[c.type] || [];
+		r[c.type].push(c);
+		return r;
+	}, Object.create(null));
+	return grouped;
+}
+
+async function uploadFile(name, data) {
+	const Minio = require('minio');
+
+	const client = new Minio.Client({
+		endPoint: 'mastercarl.com',
+		port: 9000,
+		useSSL: false,
+		accessKey: '4781AVZGNFHBAOQXC5NL',
+		secretKey: 'wv5X1HCBZV4OthWRbgawo4H6HSQGmQ+rElpaac7m'
 	});
+
+	const url = await client.presignedPutObject('default', name);
+
+	await axios.put(url, data);
+	return 'http://mastercarl.com:9000/default/' + name;
 }
 
-function addIssueToVenue(issueRef, venueRef) {
-	const venue = db.collection('issues').doc(issueId);
-	docRef.get().then(doc => {
-		const comments = doc.data().comments;
-		comments.push(comment);
-		docRef.update({comments});
-	});
-}
-
-async function getIssue(id) {
-	const docRef = db.collection('issues').doc(id);
-	const doc = await docRef.get();
-	return doc.data();
-}
-
-function createReport(venueRef, imageData, text, authorRef) {
-	const reports = db.collection('reports');
-	let image = null;
-	if (imageData) {
-		image = uploadFile(imageData);
-	}
-	reports.add({
-		image, text, author: authorRef
-	});
-	if (venueRef) {
-
-	}
-}
-
-function uploadFile(data) {
-	// TODO
-}
-//createIssue('test', 'test', ['first comment']);
-//addCommentToIssue('test', 'second comment');
-
-getIssue('test').then(console.log);
+uploadFile('test', require('fs').readFileSync('/Users/carl/Developer/hackathons/y-index/backend/api.js')).then(console.log);

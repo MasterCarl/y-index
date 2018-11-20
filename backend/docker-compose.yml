@@ -1,0 +1,27 @@
+version: '3'
+services:
+
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: yindex
+  api:
+    image: postgrest/postgrest
+    ports:
+    - "3000:3000"
+    environment:
+      PGRST_DB_URI: postgres://postgres:yindex@db:5432/postgres
+      PGRST_DB_SCHEMA: public
+      PGRST_DB_ANON_ROLE: web_anon
+      PGRST_JWT_SECRET: asdflkasdjflaskjdflasdfj
+    depends_on:
+    - db
+  minio:
+    image: minio/minio
+    command: server /data
+    ports:
+      - 9000:9000
