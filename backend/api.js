@@ -42,20 +42,10 @@ async function getContentForVenue(id) {
 }
 
 async function uploadFile(name, data) {
-	const Minio = require('minio');
-
-	const client = new Minio.Client({
-		endPoint: 'mastercarl.com',
-		port: 9000,
-		useSSL: false,
-		accessKey: '4781AVZGNFHBAOQXC5NL',
-		secretKey: 'wv5X1HCBZV4OthWRbgawo4H6HSQGmQ+rElpaac7m'
-	});
-
-	const url = await client.presignedPutObject('default', name);
-
+	const res = await axios.get(`http://mastercarl.com:4200/presignedUrl?name=${name}`);
+	const url = res.data;
 	await axios.put(url, data);
-	return 'http://mastercarl.com:9000/default/' + name;
+	return 'http://mastercarl.com:9000/default/${name}';
 }
 
 //uploadFile('test', require('fs').readFileSync('test.txt')).then(console.log);

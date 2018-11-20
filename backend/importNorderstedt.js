@@ -17,23 +17,39 @@ function processCsv(path, processRecord) {
 }
 
 
-processCsv('/Users/carl/Downloads/OpenDataNorderstedt/Daten/01_Schulen.csv',
-	csvrow => api.addRecord('venue', {
-		type: 'school',
-		name: csvrow.BEZEICH,
-		address: csvrow.LAGE,
-		city: csvrow.ORT,
-		type_detail: csvrow.SCHULTYP,
-		location: {x: csvrow.X, y: csvrow.Y}
-	}).catch(console.error)
-);
+// processCsv('/Users/carl/Downloads/OpenDataNorderstedt/Daten/01_Schulen.csv',
+// 	csvrow => api.addRecord('venue', {
+// 		type: 'school',
+// 		name: csvrow.BEZEICH,
+// 		address: csvrow.LAGE,
+// 		city: csvrow.ORT,
+// 		type_detail: csvrow.SCHULTYP,
+// 		location: {x: csvrow.X, y: csvrow.Y}
+// 	}).catch(console.error)
+// );
+//
+// processCsv('/Users/carl/Downloads/OpenDataNorderstedt/Daten/02_Kitas.csv',
+// 	csvrow => api.addRecord('venue', {
+// 		type: 'kita',
+// 		name: csvrow.BEZEICH,
+// 		address: csvrow.LAGE,
+// 		city: csvrow.ORT,
+// 		location: {x: csvrow.X, y: csvrow.Y}
+// 	}).catch(console.error)
+// );
 
-processCsv('/Users/carl/Downloads/OpenDataNorderstedt/Daten/02_Kitas.csv',
+// processCsv('/Users/carl/Downloads/OpenDataNorderstedt/Daten/03_KinderspielplÑtze.csv',
+// 	csvrow => api.addRecord('venue', {
+// 		type: 'playground',
+// 		name: csvrow.BEZEICH,
+// 		location: {x: csvrow.X, y: csvrow.Y}
+// 	}).catch(console.error)
+// );
+
+processCsv('/Users/carl/Downloads/OpenDataNorderstedt/Daten/15_Papierkîrbe.csv',
 	csvrow => api.addRecord('venue', {
-		type: 'kita',
+		type: 'playground',
 		name: csvrow.BEZEICH,
-		address: csvrow.LAGE,
-		city: csvrow.ORT,
 		location: {x: csvrow.X, y: csvrow.Y}
 	}).catch(console.error)
 );
