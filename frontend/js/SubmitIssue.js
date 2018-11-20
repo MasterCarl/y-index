@@ -20,6 +20,7 @@ import { SliderEntry } from './SliderEntry.js';
 import ImagePicker from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import Carousel from 'react-native-snap-carousel';
+import api from './api';
 
 const options = {
   title: 'Select Photo',
@@ -34,6 +35,7 @@ export class SubmitIssue extends React.Component {
     super(props);
     this.state = {
       imageSource: null,
+      imageData: null,
       selectedTopic: null,
       description: null,
     };
@@ -62,6 +64,7 @@ export class SubmitIssue extends React.Component {
 
         parent.setState({
           imageSource: source,
+          imageData: response.data,
         });
         setTimeout(function () {
           parent.onSubmit();
@@ -83,7 +86,14 @@ export class SubmitIssue extends React.Component {
   }
 
   onSubmit() {
-    const { imageSource, selectedTopic, description } = this.state;
+    const { imageSource, imageData, selectedTopic, description } = this.state;
+    const url = api.uploadFile(api.makeid(), imageData);
+    console.log('uploaded image', url);
+    const venueId = null;
+    const location = null;
+    api.createIssue(venueId, url, description, location)
+        .then(_ => console.log('success'))
+        .catch(console.error);
   }
   
   render() {
