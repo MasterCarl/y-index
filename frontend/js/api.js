@@ -42,8 +42,11 @@ async function getContentForVenue(id) {
 }
 
 async function uploadFile(name, data) {
-	const url = await axios.get(`http://mastercarl.com:4200/presignedUrl?name=${name}`);
+	const res = await axios.get(`http://mastercarl.com:4200/presignedUrl?name=${name}`);
+	const url = res.data;
+	console.log('uploading to signed url', url);
 	await axios.put(url, data);
+	console.log('upload succeeded');
 	return 'http://mastercarl.com:9000/default/${name}';
 }
 

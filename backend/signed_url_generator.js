@@ -4,7 +4,7 @@ const server = require('express')()
 const Minio = require('minio');
 
 const client = new Minio.Client({
-	endPoint: 'localhost',
+	endPoint: 'mastercarl.com',
 	port: 9000,
 	useSSL: false,
 	accessKey: '4781AVZGNFHBAOQXC5NL',
