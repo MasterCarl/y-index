@@ -21,11 +21,10 @@ export class SliderEntry extends Component {
           <Image
               source={image}
               style={styles.image}
-              resizeMethod="scale"
             />
         ) : (
             <Image
-              source={{ uri: illustration }}
+              source={image}
               style={styles.image}
             />
         );

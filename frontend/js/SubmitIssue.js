@@ -115,7 +115,7 @@ export class SubmitIssue extends React.Component {
             itemWidth={itemWidth}
             onSnapToItem={(index) => this.setState({ selectedTopic: ENTRIES[index].index }) }
           />
-          <TouchableOpacity style={[styles.submitButton, { marginTop: 0, }]} onPress={() => this.scroller.scrollTo({x: 0, y: height})}>
+          <TouchableOpacity style={[styles.submitButton, { position: 'absolute', top: 520, width: '100%' }]} onPress={() => this.scroller.scrollTo({x: 0, y: height})}>
             <Text style={{ color: '#fff', textAlign: 'center', fontSize: 18, paddingTop: 5}}>Continue</Text>
           </TouchableOpacity>
         </View>
