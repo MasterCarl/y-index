@@ -44,7 +44,7 @@ export default class ArBerlin extends Component {
 
     this.state = {
       sharedProps : sharedProps,
-      currentScreen: SCREENS.SubmitIssue, 
+      currentScreen: SCREENS.SubmitIssue,
     }
     this._getARNavigator = this._getARNavigator.bind(this);
     this.goToScreen = this.goToScreen.bind(this);

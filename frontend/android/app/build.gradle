@@ -116,19 +116,23 @@ android {
             include "armeabi-v7a", "x86"
         }
     }
+    flavorDimensions "virtualType"
     productFlavors {
         ar {
             resValue 'string', 'app_name', 'ArBerlin-ar'
             buildConfigField 'String', 'VR_PLATFORM', '"GVR"' //default to GVR
+            dimension "virtualType"
         }
         gvr {
             resValue 'string', 'app_name', 'ArBerlin-gvr'
             buildConfigField 'String', 'VR_PLATFORM', '"GVR"'
+            dimension "virtualType"
         }
         ovr {
             resValue 'string', 'app_name', 'ArBerlin-ovr'
             applicationIdSuffix '.ovr'
             buildConfigField 'String', 'VR_PLATFORM', '"OVR_MOBILE"'
+            dimension "virtualType"
         }
     }
     buildTypes {
@@ -153,6 +157,8 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-vector-icons')
+    compile project(':react-native-image-picker')
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:25.0.0'
     compile 'com.facebook.react:react-native:+'
