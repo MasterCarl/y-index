@@ -1,8 +1,13 @@
 const axios = require('axios');
 
 async function queryTable(table, arguments) {
+	if (arguments) {
+		arguments = '?' + arguments;
+	} else {
+		arguments = ''
+	}
 	try {
-		const response = await axios.get(`http://mastercarl.com:3000/${table}${arguments || ''}`);
+		const response = await axios.get(`http://mastercarl.com:3000/${table}${arguments}`);
 		return response.data;
 	} catch (e) {
 		console.error(e);
@@ -12,12 +17,6 @@ async function queryTable(table, arguments) {
 async function addRecord(table, record) {
 	return await axios.post(`http://mastercarl.com:3000/${table}`, record).catch(console.error);
 }
-
-module.exports = {queryTable, addRecord};
-
-//queryTable('venue').then(console.log);
-
-// issue relating to
 
 function createContent(type, venue, picture_url, text, location) {
 	return addRecord(
@@ -33,7 +32,7 @@ function addCommentToIssue(issueId, comment, author) {
 }
 
 async function getContentForVenue(id) {
-	const content = await queryTable('venue_content', `?venue=eq.${id}`);
+	const content = await queryTable('venue_content', `venue=eq.${id}`);
 	const grouped = content.reduce(function (r, c) {
 		r[c.type] = r[c.type] || [];
 		r[c.type].push(c);
@@ -59,4 +58,6 @@ async function uploadFile(name, data) {
 	return 'http://mastercarl.com:9000/default/' + name;
 }
 
-uploadFile('test', require('fs').readFileSync('/Users/carl/Developer/hackathons/y-index/backend/api.js')).then(console.log);
+//uploadFile('test', require('fs').readFileSync('test.txt')).then(console.log);
+
+module.exports = {queryTable, addRecord, uploadFile, getContentForVenue, createIssue, createContent};
