@@ -47,7 +47,7 @@ async function uploadFile(name, data) {
 	console.log('uploading to signed url', url);
 	await axios.put(url, data);
 	console.log('upload succeeded');
-	return 'http://mastercarl.com:9000/default/${name}';
+	return `http://mastercarl.com:9000/default/${name}`;
 }
 
 //uploadFile('test', require('fs').readFileSync('test.txt')).then(console.log);
