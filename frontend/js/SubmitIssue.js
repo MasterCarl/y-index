@@ -66,7 +66,9 @@ export class SubmitIssue extends React.Component {
           imageSource: source,
           imageData: response.data,
         });
+        console.log('taken photo');
         setTimeout(function () {
+          console.log('submitting');
           parent.onSubmit();
         }, 1000);
         
@@ -87,6 +89,7 @@ export class SubmitIssue extends React.Component {
 
   onSubmit() {
     const { imageSource, imageData, selectedTopic, description } = this.state;
+    console.log(this.state);
     const url = api.uploadFile(api.makeid(), imageData);
     console.log('uploaded image', url);
     const venueId = null;

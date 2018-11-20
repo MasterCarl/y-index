@@ -21,6 +21,7 @@ import {
   ViroARSceneNavigator
 } from 'react-viro';
 import { SubmitIssue } from './js/SubmitIssue.js';
+import { MapOverview } from './js/MapOverview.js';
 import {
   apiKey
 } from './key.js';
@@ -32,7 +33,8 @@ var sharedProps = {
 export const SCREENS = {
   SubmitIssue: 'SubmitIssue',
   IssueDialog: 'IssueDialog',
-  MapOverview: 'MapOverview'
+  MapOverview: 'MapOverview',
+  ArMap: 'ArMap'
 }
 
 // Sets the default scene you want for AR and VR
@@ -44,7 +46,7 @@ export default class ArBerlin extends Component {
 
     this.state = {
       sharedProps : sharedProps,
-      currentScreen: SCREENS.SubmitIssue,
+      currentScreen: SCREENS.MapOverview,
     }
     this._getARNavigator = this._getARNavigator.bind(this);
     this.goToScreen = this.goToScreen.bind(this);
@@ -56,7 +58,9 @@ export default class ArBerlin extends Component {
     const { currentScreen } = this.state;
     if (currentScreen == SCREENS.SubmitIssue) {
       return <SubmitIssue goToScreen={this.goToScreen} />;
-    } else if (currentScreen == SCREENS.MapOverview) {
+    } else if (currentScreen) {
+      return <MapOverview goToScreen={this.goToScreen} />;
+    } else if (currentScreen == SCREENS.ArMap) {
       return this._getARNavigator();
     } else {
       return <View><Text>Error no screen selected. Current screen: {this.state.currentScreen}</Text></View>
