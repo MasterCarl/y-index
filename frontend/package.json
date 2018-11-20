@@ -8,10 +8,12 @@
     "test": "jest"
   },
   "dependencies": {
+    "@material-ui/core": "^3.5.1",
     "axios": "^0.18.0",
     "react": "16.3.1",
     "react-native": "0.55.1",
     "react-native-image-picker": "^0.27.1",
+    "react-native-maps": "^0.22.1",
     "react-native-snap-carousel": "^3.7.5",
     "react-native-vector-icons": "^6.1.0",
     "react-viro": "2.12.0"

@@ -38,6 +38,8 @@ export class SubmitIssue extends React.Component {
       imageData: null,
       selectedTopic: null,
       description: null,
+      imageType: null,
+      fileName: null,
     };
     this.takePhoto = this.takePhoto.bind(this);
   }
@@ -62,14 +64,17 @@ export class SubmitIssue extends React.Component {
         // You can also display the image using data:
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
 
-        parent.setState({
+        const nextState = Object.assign({}, this.state, {
           imageSource: source,
           imageData: response.data,
+          imageType: response.type,
+          fileName: response.fileName,
         });
+        this.setState(nextState);
         console.log('taken photo');
         setTimeout(function () {
           console.log('submitting');
-          parent.onSubmit();
+          parent.onSubmit(nextState);
         }, 1000);
         
       }
@@ -87,16 +92,19 @@ export class SubmitIssue extends React.Component {
     );
   }
 
-  onSubmit() {
-    const { imageSource, imageData, selectedTopic, description } = this.state;
+  onSubmit(nextState) {
+    console.log(nextState);
+    const { imageSource, imageData, selectedTopic, description, fileName, imageType } = nextState;
     console.log(this.state);
-    const url = api.uploadFile(api.makeid(), imageData);
-    console.log('uploaded image', url);
-    const venueId = null;
-    const location = null;
-    api.createIssue(venueId, url, description, location)
-        .then(_ => console.log('success'))
-        .catch(console.error);
+    const url = api.uploadFile(api.makeid(), imageData, imageSource, imageType, fileName).then((url) => {
+      console.log('uploaded image', url);
+      const venueId = null;
+      const location = null;
+      api.createIssue(venueId, url, description, location)
+          .then(_ => console.log('success'))
+          
+    }).catch(console.error);
+
   }
   
   render() {

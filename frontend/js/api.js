@@ -1,13 +1,13 @@
 const axios = require('axios');
 
-async function queryTable(table, arguments) {
-	if (arguments) {
-		arguments = '?' + arguments;
+async function queryTable(table, params) {
+	if (params) {
+		params = '?' + params;
 	} else {
-		arguments = ''
+		params = ''
 	}
 	try {
-		const response = await axios.get(`http://mastercarl.com:3000/${table}${arguments}`);
+		const response = await axios.get(`http://mastercarl.com:3000/${table}${params}`);
 		return response.data;
 	} catch (e) {
 		console.error(e);
