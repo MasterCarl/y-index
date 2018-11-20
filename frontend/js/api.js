@@ -42,29 +42,9 @@ async function getContentForVenue(id) {
 }
 
 async function uploadFile(name, data) {
-	// const Minio = require('minio');
-	//
-	// const client = new Minio.Client({
-	// 	endPoint: 'mastercarl.com',
-	// 	port: 9000,
-	// 	useSSL: false,
-	// 	accessKey: '4781AVZGNFHBAOQXC5NL',
-	// 	secretKey: 'wv5X1HCBZV4OthWRbgawo4H6HSQGmQ+rElpaac7m'
-	// });
-
-	// AWS.config.credentials = new AWS.Credentials('4781AVZGNFHBAOQXC5NL', 'wv5X1HCBZV4OthWRbgawo4H6HSQGmQ+rElpaac7m', null);
-	// var params = {
-	// 	Body: data,
-	// 	Bucket: "default",
-	// 	Key: name,
-	// };
-	// await s3.putObject(params);
-
-	//const url = await client.presignedPutObject('default', name);
-
-	//await axios.put(url, data);
-	await axios.put(`mastercarl.com:4200/upload/${name}`, data);
-	return 'http://mastercarl.com:4200/download/' + name;
+	const url = await axios.get(`http://mastercarl.com:4200/presignedUrl?name=${name}`);
+	await axios.put(url, data);
+	return 'http://mastercarl.com:9000/default/${name}';
 }
 
 //uploadFile('test', require('fs').readFileSync('test.txt')).then(console.log);
