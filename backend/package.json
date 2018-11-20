@@ -1,0 +1,9 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "dependencies": {
+    "csv": "^4.0.0",
+    "firebase-admin": "^6.2.0"
+  }
+}
