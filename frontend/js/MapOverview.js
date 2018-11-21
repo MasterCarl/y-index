@@ -151,7 +151,7 @@ export class MapOverview extends React.Component {
         }
       });
     }
-    this.setState({ collapsed: true });
+    this.setState({ collapsed: true, currentMarker, schuleMarkers, familyMarkers, kindergartenMarkers });
   }
 
   async fetchVenues() {
