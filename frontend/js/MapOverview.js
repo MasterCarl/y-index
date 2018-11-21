@@ -26,14 +26,6 @@ const region = {
   longitudeDelta:0.1
 }
 
-const mockedSchuleMarkers = [ {
-  coordinate: {
-    latitude:53.6859, 
-    longitude:9.98041,
-  },
-  name: 'Grundschule Falkenberg',
-  address: 'MoorbekStrasse 15, 22846, Nordersted'
-}];
 
 export class MapOverview extends React.Component {
   constructor(props) {
@@ -50,8 +42,8 @@ export class MapOverview extends React.Component {
   getMarkers(markers) {
     return markers.map(marker => (
       <MapView.Marker
-        key={marker.name}
-        coordinate={marker.coordinate}
+        key={marker.id}
+        coordinate={marker.location}
         title={marker.name}
         onPress={() => this.expandMarkerInfo(marker)}
        />
@@ -69,8 +61,15 @@ export class MapOverview extends React.Component {
     nextState.familyMarkers = [];
     nextState.kindergartenMarkers = [];
     if (nextState.active === 'schule') {
-      nextState.schuleMarkers = mockedSchuleMarkers;
+      nextState.schuleMarkers = venues.school;
     }
+    if (nextState.active === 'family') {
+        nextState.familyMarkers = venues.playground;
+    }
+    if (nextState.active === 'kindergarten') {
+        nextState.kindergartenMarkers = venues.kita;
+    }
+
     this.setState(nextState);
   }
 
@@ -91,6 +90,7 @@ export class MapOverview extends React.Component {
   async fetchVenues() {
       const venues = await api.getVenuesByCategory();
       this.setState({
+          venues,
           schuleMarkers: venues.school,
           familyMarkers: venues.playground,
 		  kindergartenMarkers: venues.kita
