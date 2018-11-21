@@ -118,6 +118,7 @@ export class MapOverview extends React.Component {
     currentMarker.saved = true;
     console.log(currentMarker);
     let foundMarker = false;
+    api.starVenue(currentMarker.id, true).then(console.log).catch(console.error);
     familyMarkers.forEach(marker => {
       if (marker.name == currentMarker.name) {
         marker.saved = true;

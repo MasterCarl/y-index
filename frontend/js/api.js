@@ -65,8 +65,8 @@ async function getVenuesByCategory() {
 }
 //uploadFile('test', require('fs').readFileSync('test.txt')).then(console.log);
 
-async function starVenue(id, starred) {
-	return await patchRecord('venue', id, {starred});
+async function starVenue(id, saved) {
+	return await patchRecord('venue', id, {saved});
 }
 
 function makeid() {
