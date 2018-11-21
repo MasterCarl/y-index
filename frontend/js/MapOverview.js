@@ -121,30 +121,33 @@ export class MapOverview extends React.Component {
         });
       }
     });
-    if (foundMarker) return;
-    kindergartenMarkers.forEach(marker => {
-      if (marker.name == currentMarker.name) {
-        marker.saved = true;
-        foundMarker = true;
-        familyMarkers.forEach(marker2 => {
-          if (marker2.name == currentMarker.name) {
-            marker2.saved = true;
-          }
-        });
-      }
-    });
-    if (foundMarker) return;
-    schuleMarkers.forEach(marker => {
-      if (marker.name == currentMarker.name) {
-        marker.saved = true;
-        foundMarker = true;
-        familyMarkers.forEach(marker2 => {
-          if (marker2.name == currentMarker.name) {
-            marker2.saved = true;
-          }
-        });
-      }
-    });
+    if (!foundMarker) {
+      kindergartenMarkers.forEach(marker => {
+        if (marker.name == currentMarker.name) {
+          marker.saved = true;
+          foundMarker = true;
+          familyMarkers.forEach(marker2 => {
+            if (marker2.name == currentMarker.name) {
+              marker2.saved = true;
+            }
+          });
+        }
+      });
+    }
+    if (!foundMarker) {
+      schuleMarkers.forEach(marker => {
+        if (marker.name == currentMarker.name) {
+          marker.saved = true;
+          foundMarker = true;
+          familyMarkers.forEach(marker2 => {
+            if (marker2.name == currentMarker.name) {
+              marker2.saved = true;
+            }
+          });
+        }
+      });
+    }
+    this.setState({ collapsed: true });
   }
 
   async fetchVenues() {
@@ -232,32 +235,25 @@ export class MapOverview extends React.Component {
                     <TouchableOpacity onPress={() => this.onSaveMarker()}>
                       <Icon name="stars" size={30}/>
                     </TouchableOpacity>
-                  </View>                  
+                  </View>
                 </View>
               )}
-              <View style={{ position: 'relative', marginTop: 0, backgroundColor: 'white'}}>
+              <View style={{ position: 'relative', marginTop: -10, backgroundColor: 'white'}}>
                 <Image 
-                  style={{ height:55}}
-                  source = {require('./assets/questions.png')}
+                  source = {require('./assets/questions55.jpg')}
                         key="question"
-                        resizeMode="contain"
                         onPress={() => this.changeDetails('question')}
                   />
-                <Image source ={require('./assets/ideen.png')}
+                <Image source ={require('./assets/ideen55.jpg')}
                         key="ideen"
-                        style={{ height: 55}}
-                        resizeMode="contain"
                         onPress={()=>this.changeDetails('ideen')}
-                
                 />
-                <Image source = {require('./assets/challenges.png')}
+                <Image source = {require('./assets/challenges55.jpg')}
                         key='challenge'
-                        style={{ height: 55}}
-                        resizeMode="contain"
                         onPress={()=>this.changeDetails('challenge')}
                 
                 />
-              </View>
+            </View>
             </View>
           </View>
         </View>
