@@ -40,6 +40,7 @@ export class MapOverview extends React.Component {
       currentMarker: null,
     };
     this.getMarkers = this.getMarkers.bind(this);
+    this.onSaveMarker = this.onSaveMarker.bind(this);
   }
 
   componentDidMount() {
