@@ -45,6 +45,16 @@ async function getContentForVenue(id) {
 	return grouped;
 }
 
+async function getVenuesByCategory() {
+	const content = await queryTable('venue');
+	const grouped = content.reduce(function (r, c) {
+		r[c.type] = r[c.type] || [];
+		r[c.type].push(c);
+		return r;
+	}, Object.create(null));
+	return grouped;
+}
+
 async function uploadFile(name, data) {
 	const res = await axios.get(`http://mastercarl.com:4200/presignedUrl?name=${name}`);
 	const url = res.data;
@@ -54,4 +64,4 @@ async function uploadFile(name, data) {
 
 //uploadFile('test', require('fs').readFileSync('test.txt')).then(console.log);
 
-module.exports = {queryTable, addRecord, uploadFile, getContentForVenue, createIssue, createContent, patchRecord};
+module.exports = {queryTable, addRecord, uploadFile, getContentForVenue, createIssue, createContent, patchRecord, getVenuesByCategory};

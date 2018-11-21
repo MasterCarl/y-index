@@ -17,6 +17,7 @@ import MapView from 'react-native-maps';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import { COLORS } from './Styles';
 import { SCREENS } from '../App';
+import * as api from "../../backend/api";
 
 const region = {
   latitude:53.6859, 
@@ -81,6 +82,19 @@ export class MapOverview extends React.Component {
     if (this.state.collapsed === false) {
       this.setState({collapsed: true});
     }
+  }
+
+  componentDidMount() {
+      this.fetchVenues().catch(console.error);
+  }
+
+  async fetchVenues() {
+      const venues = await api.getVenuesByCategory();
+      this.setState({
+          schuleMarkers: venues.school,
+          familyMarkers: venues.playground,
+		  kindergartenMarkers: venues.kita
+      });
   }
  
   render() {

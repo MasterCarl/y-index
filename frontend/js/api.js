@@ -54,6 +54,15 @@ async function uploadFile(name, data) {
 	return `http://mastercarl.com:9000/default/${name}`;
 }
 
+async function getVenuesByCategory() {
+	const content = await queryTable('venue');
+	const grouped = content.reduce(function (r, c) {
+		r[c.type] = r[c.type] || [];
+		r[c.type].push(c);
+		return r;
+	}, Object.create(null));
+	return grouped;
+}
 //uploadFile('test', require('fs').readFileSync('test.txt')).then(console.log);
 
 async function starVenue(id, starred) {
