@@ -38,6 +38,7 @@ export class MapOverview extends React.Component {
       kindergartenMarkers: [],
       collapsed: true,
       currentMarker: null,
+      saved: false,
     };
     this.getMarkers = this.getMarkers.bind(this);
     this.onSaveMarker = this.onSaveMarker.bind(this);
@@ -53,7 +54,8 @@ export class MapOverview extends React.Component {
   }
 
   getMarkers(markers, category) {
-    return markers.map(marker => {
+    const { saved } = this.state;
+    return markers.map(marker => {      
       let image = this.schuleIcon;
       if (marker.saved === true) {
         image = this.starsIcon;
@@ -64,18 +66,20 @@ export class MapOverview extends React.Component {
       }
       const attrs = {};
       if (marker.saved) {
+        console.log('saved');
         attrs.pinColor = 'blue';
       }
-      return (
-        <MapView.Marker
-          key={marker.id}
-          coordinate={marker.location}
-          title={marker.name}
-          image={image}
-          {...attrs}
-          onPress={() => this.expandMarkerInfo(marker)}
-        />
-      );
+      if (!saved || marker.saved === true) {
+        const key = marker.name + '_saved';
+        return (
+          <MapView.Marker
+            key={marker.name}
+            coordinate={marker.location}
+            title={marker.name}
+            onPress={() => this.expandMarkerInfo(marker)}
+          />
+        );
+      }
     });    
   }
 
@@ -108,7 +112,7 @@ export class MapOverview extends React.Component {
 
   collapseMarkerInfo() {
     if (this.state.collapsed === false) {
-      this.setState({collapsed: true});
+      this.setState({collapsed: true, saved: false});
     }
   }
 
@@ -156,7 +160,7 @@ export class MapOverview extends React.Component {
         }
       });
     }
-    this.setState({ collapsed: true, currentMarker, schuleMarkers, familyMarkers, kindergartenMarkers, venues });
+    this.setState({ saved: true, collapsed: true, currentMarker, schuleMarkers, familyMarkers, kindergartenMarkers, venues });
   }
 
   async fetchVenues() {
