@@ -61,6 +61,10 @@ export class MapOverview extends React.Component {
       } else if (category === 'kindergarten') {
         image = this.kitaIcon
       }
+      const attrs = {};
+      if (marker.saved) {
+        attrs.pinColor = 'blue';
+      }
       return (
         <MapView.Marker
           key={marker.id}
@@ -180,13 +184,13 @@ export class MapOverview extends React.Component {
               {familyMarkers.length > 0 && this.getMarkers(familyMarkers, 'family')}
               {kindergartenMarkers.length > 0 && this.getMarkers(kindergartenMarkers, 'kindergarten')}
             </MapView>
-            <MapView.Callout style={{ position: 'absolute', top: 0, right: 0}}>
+            {/*<MapView.Callout style={{ position: 'absolute', top: 0, right: 0}}>
                   <View style={styles.calloutView}>
                       <TextInput style={styles.calloutSearch}
                           placeholder={'Search'}
                       />
                   </View>
-            </MapView.Callout>
+              </MapView.Callout>*/}
         </View>
         <View style={{ position: 'relative', height: actionButtonHeight }}>
           <ActionButton onPress={() => this.props.goToScreen(SCREENS.SubmitIssue)} />    
@@ -251,7 +255,6 @@ export class MapOverview extends React.Component {
                 <Image source = {require('./assets/challenges55.jpg')}
                         key='challenge'
                         onPress={()=>this.changeDetails('challenge')}
-                
                 />
             </View>
             </View>
