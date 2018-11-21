@@ -18,6 +18,10 @@ async function addRecord(table, record) {
 	return await axios.post(`http://mastercarl.com:3000/${table}`, record).catch(console.error);
 }
 
+async function patchRecord(table, id, record) {
+	return await axios.patch(`http://mastercarl.com:3000/${table}?id=eq.${id}`, record).catch(console.error);
+}
+
 function createContent(type, venue, picture_url, text, location) {
 	return addRecord(
 			'venue_content',
@@ -47,10 +51,14 @@ async function uploadFile(name, data) {
 	console.log('uploading to signed url', url);
 	await axios.put(url, data);
 	console.log('upload succeeded');
-	return 'http://mastercarl.com:9000/default/${name}';
+	return `http://mastercarl.com:9000/default/${name}`;
 }
 
 //uploadFile('test', require('fs').readFileSync('test.txt')).then(console.log);
+
+async function starVenue(id, starred) {
+	return await patchRecord('venue', id, {starred});
+}
 
 function makeid() {
 	var text = "";
@@ -63,4 +71,4 @@ function makeid() {
 }
 
 
-module.exports = {queryTable, addRecord, uploadFile, getContentForVenue, createIssue, createContent, makeid};
+module.exports = {queryTable, addRecord, uploadFile, getContentForVenue, createIssue, createContent, makeid, starVenue};
