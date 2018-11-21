@@ -30,6 +30,7 @@ var sharedProps = {
   apiKey
 }
 
+console.ignoredYellowBox = ['Warning: componentWill'];
 export const SCREENS = {
   SubmitIssue: 'SubmitIssue',
   IssueDialog: 'IssueDialog',

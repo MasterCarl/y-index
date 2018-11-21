@@ -4,6 +4,6 @@ export const COLORS = {
   Blue3: '#429FC9',
   Blue4: '#1393CF',
   Blue5: '#007FBA',
-  Background:'#1b1b1b',
-  TextInput: '#252525'
+  Background: '#fafafa',
+  TextInput: '#fff'
 };

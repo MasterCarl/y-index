@@ -11,6 +11,7 @@ import {
 import { 
   ActionButton,
   BottomNavigation,
+  Divider,
 } from 'react-native-material-ui';
 import MapView from 'react-native-maps'; 
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
@@ -29,7 +30,8 @@ const mockedSchuleMarkers = [ {
     latitude:53.6859, 
     longitude:9.98041,
   },
-  title: 'Schule A',
+  name: 'Grundschule Falkenberg',
+  address: 'MoorbekStrasse 15, 22846, Nordersted'
 }];
 
 export class MapOverview extends React.Component {
@@ -41,15 +43,16 @@ export class MapOverview extends React.Component {
       familyMarkers: [],
       kindergartenMarkers: [],
       collapsed: true,
+      currentMarker: null,
     };
   }
   getMarkers(markers) {
     return markers.map(marker => (
       <MapView.Marker
-        key={marker.title}
+        key={marker.name}
         coordinate={marker.coordinate}
-        title={marker.title}
-        onPress={() => this.selectMarker(marker)}
+        title={marker.name}
+        onPress={() => this.expandMarkerInfo(marker)}
        />
     ));    
   }
@@ -70,27 +73,27 @@ export class MapOverview extends React.Component {
     this.setState(nextState);
   }
 
-  selectMarker(marker) {
-    this.setState({ collapsed: false })
+  expandMarkerInfo(marker) {
+    this.setState({ collapsed: false, currentMarker: marker })
   }
 
-  deselectMarker() {
-    if (this.state.collapsed === true) {
-      this.setState({collapsed: false});
+  collapseMarkerInfo() {
+    if (this.state.collapsed === false) {
+      this.setState({collapsed: true});
     }
   }
  
   render() {
     const { height } = Dimensions.get('window');
-    const { active, schuleMarkers, familyMarkers, kindergartenMarkers, collapsed  } = this.state;
+    const { active, schuleMarkers, familyMarkers, kindergartenMarkers, collapsed, currentMarker  } = this.state;
     const actionButtonHeight = collapsed ? height - 90 : height - 290
     return (
       <View style={{ flex: 1 }}>
         <View style={styles.container}>
             <MapView style={styles.map}
                 initialRegion={region}
-                onPress={() => this.deselectMarker()}
-                onPanDrag={() => this.deselectMarker()}
+                onPress={() => this.collapseMarkerInfo()}
+                onPanDrag={() => this.collapseMarkerInfo()}
               >
               {schuleMarkers.length > 0 && this.getMarkers(schuleMarkers)}
               {familyMarkers.length > 0 && this.getMarkers(familyMarkers)}
@@ -109,7 +112,7 @@ export class MapOverview extends React.Component {
         </View>
         <View style={{ position: 'relative', marginTop: 15, backgroundColor: 'white'}}>       
           <View>
-            <BottomNavigation active={this.state.active} hidden={false}
+            {collapsed === true && (<BottomNavigation active={this.state.active} hidden={false}
               style={{ shadowOffset: {
                 "height": 0,
                 "width": 0,
@@ -134,9 +137,16 @@ export class MapOverview extends React.Component {
                     label="Kindergarten"
                     onPress={() => this.changeCategory('kindergarten')}
                 />
-            </BottomNavigation>
-            <View style={{ zIndex: 100, height: 200}}>
-              <Text>This is a test</Text>
+            </BottomNavigation>)}
+
+            <View style={{ zIndex: 100, height: 250, borderTopLeftRadius: 10, borderTopRightRadius: 10, paddingLeft: 20, paddingTop: 5 }}>
+              <TouchableOpacity onPress onPress={() => this.collapseMarkerInfo()} >
+                <View style={{ borderBottomWidth: 1, borderBottomColor: '#DDD', width: 75, marginBottom: 3, marginLeft: 140,  }} />
+                <View style={{ borderBottomWidth: 1, borderBottomColor: '#DDD', width: 75, marginLeft: 140, marginBottom: 10 }} />
+              </TouchableOpacity>
+              {currentMarker !== null && (
+                <Text>{currentMarker.address}</Text>
+              )}
             </View>
           </View>
         </View>
