@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TextInput,
   Dimensions,
+  Image,
 } from 'react-native';
 import { 
   ActionButton,
@@ -17,7 +18,7 @@ import MapView from 'react-native-maps';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import { COLORS } from './Styles';
 import { SCREENS } from '../App';
-import * as api from "../../backend/api";
+import * as api from "./api";
 
 const region = {
   latitude:53.6859, 
@@ -38,16 +39,38 @@ export class MapOverview extends React.Component {
       collapsed: true,
       currentMarker: null,
     };
+    this.getMarkers = this.getMarkers.bind(this);
   }
-  getMarkers(markers) {
-    return markers.map(marker => (
-      <MapView.Marker
-        key={marker.id}
-        coordinate={marker.location}
-        title={marker.name}
-        onPress={() => this.expandMarkerInfo(marker)}
-       />
-    ));    
+
+  componentDidMount() {
+    const parent = this;
+      Icon.getImageSource("today", 20).then(imageSource => parent.schuleIcon);
+      Icon.getImageSource("people", 20).then(imageSource => parent.familyIcon);
+      Icon.getImageSource("bookmark-border", 20).then(imageSource => parent.kitaIcon);
+      Icon.getImageSource("stars", 20).then(imageSource => parent.starsIcon);
+      this.fetchVenues().catch(console.error);
+  }
+
+  getMarkers(markers, category) {
+    return markers.map(marker => {
+      let image = this.schuleIcon;
+      if (marker.saved === true) {
+        image = this.starsIcon;
+      } else if (category === 'family') {
+        image = this.familyIcon
+      } else if (category === 'kindergarten') {
+        image = this.kitaIcon
+      }
+      return (
+        <MapView.Marker
+          key={marker.id}
+          coordinate={marker.location}
+          title={marker.name}
+          image={image}
+          onPress={() => this.expandMarkerInfo(marker)}
+        />
+      );
+    });    
   }
 
   changeCategory(category) {
@@ -61,20 +84,20 @@ export class MapOverview extends React.Component {
     nextState.familyMarkers = [];
     nextState.kindergartenMarkers = [];
     if (nextState.active === 'schule') {
-      nextState.schuleMarkers = venues.school;
+      nextState.schuleMarkers = this.state.venues.school;
     }
     if (nextState.active === 'family') {
-        nextState.familyMarkers = venues.playground;
+        nextState.familyMarkers = this.state.venues.playground;
     }
     if (nextState.active === 'kindergarten') {
-        nextState.kindergartenMarkers = venues.kita;
+        nextState.kindergartenMarkers = this.state.venues.kita;
     }
 
     this.setState(nextState);
   }
 
   expandMarkerInfo(marker) {
-    this.setState({ collapsed: false, currentMarker: marker })
+    this.setState({ collapsed: false, currentMarker: marker });
   }
 
   collapseMarkerInfo() {
@@ -83,18 +106,59 @@ export class MapOverview extends React.Component {
     }
   }
 
-  componentDidMount() {
-      this.fetchVenues().catch(console.error);
+  onSaveMarker() {
+    const { currentMarker, venues, familyMarkers, kindergartenMarkers, schuleMarkers } = this.state;
+    currentMarker.saved = true;
+    let foundMarker = false;
+    familyMarkers.forEach(marker => {
+      if (marker.name == currentMarker.name) {
+        marker.saved = true;
+        foundMarker = true;
+        familyMarkers.forEach(marker2 => {
+          if (marker2.name == currentMarker.name) {
+            marker2.saved = true;
+          }
+        });
+      }
+    });
+    if (foundMarker) return;
+    kindergartenMarkers.forEach(marker => {
+      if (marker.name == currentMarker.name) {
+        marker.saved = true;
+        foundMarker = true;
+        familyMarkers.forEach(marker2 => {
+          if (marker2.name == currentMarker.name) {
+            marker2.saved = true;
+          }
+        });
+      }
+    });
+    if (foundMarker) return;
+    schuleMarkers.forEach(marker => {
+      if (marker.name == currentMarker.name) {
+        marker.saved = true;
+        foundMarker = true;
+        familyMarkers.forEach(marker2 => {
+          if (marker2.name == currentMarker.name) {
+            marker2.saved = true;
+          }
+        });
+      }
+    });
   }
 
   async fetchVenues() {
       const venues = await api.getVenuesByCategory();
       this.setState({
           venues,
-          schuleMarkers: venues.school,
-          familyMarkers: venues.playground,
-		  kindergartenMarkers: venues.kita
+          schuleMarkers: [],
+          familyMarkers: [],
+		      kindergartenMarkers: [],
       });
+  }
+
+  changeDetails() {
+    console.log('follow-on project :)');
   }
  
   render() {
@@ -109,9 +173,9 @@ export class MapOverview extends React.Component {
                 onPress={() => this.collapseMarkerInfo()}
                 onPanDrag={() => this.collapseMarkerInfo()}
               >
-              {schuleMarkers.length > 0 && this.getMarkers(schuleMarkers)}
-              {familyMarkers.length > 0 && this.getMarkers(familyMarkers)}
-              {kindergartenMarkers.length > 0 && this.getMarkers(kindergartenMarkers)}
+              {schuleMarkers.length > 0 && this.getMarkers(schuleMarkers, 'schule')}
+              {familyMarkers.length > 0 && this.getMarkers(familyMarkers, 'family')}
+              {kindergartenMarkers.length > 0 && this.getMarkers(kindergartenMarkers, 'kindergarten')}
             </MapView>
             <MapView.Callout style={{ position: 'absolute', top: 0, right: 0}}>
                   <View style={styles.calloutView}>
@@ -148,7 +212,7 @@ export class MapOverview extends React.Component {
                 <BottomNavigation.Action
                     key="kindergarten"
                     icon="bookmark-border"
-                    label="Kindergarten"
+                    label="Kita"
                     onPress={() => this.changeCategory('kindergarten')}
                 />
             </BottomNavigation>)}
@@ -159,8 +223,41 @@ export class MapOverview extends React.Component {
                 <View style={{ borderBottomWidth: 1, borderBottomColor: '#DDD', width: 75, marginLeft: 140, marginBottom: 10 }} />
               </TouchableOpacity>
               {currentMarker !== null && (
-                <Text>{currentMarker.address}</Text>
+                <View style={{ flex: 1, flexDirection: 'row' }}>
+                  <View style={{ width: 300 }}>
+                    <Text>{currentMarker.name}</Text>
+                    <Text>{currentMarker.address}, {currentMarker.city}</Text>
+                  </View>
+                  <View style={{ width: 100 }}>
+                    <TouchableOpacity onPress={() => this.onSaveMarker()}>
+                      <Icon name="stars" size={30}/>
+                    </TouchableOpacity>
+                  </View>                  
+                </View>
               )}
+              <View style={{ position: 'relative', marginTop: 0, backgroundColor: 'white'}}>
+                <Image 
+                  style={{ height:55}}
+                  source = {require('./assets/questions.png')}
+                        key="question"
+                        resizeMode="contain"
+                        onPress={() => this.changeDetails('question')}
+                  />
+                <Image source ={require('./assets/ideen.png')}
+                        key="ideen"
+                        style={{ height: 55}}
+                        resizeMode="contain"
+                        onPress={()=>this.changeDetails('ideen')}
+                
+                />
+                <Image source = {require('./assets/challenges.png')}
+                        key='challenge'
+                        style={{ height: 55}}
+                        resizeMode="contain"
+                        onPress={()=>this.changeDetails('challenge')}
+                
+                />
+              </View>
             </View>
           </View>
         </View>

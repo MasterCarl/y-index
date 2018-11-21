@@ -80,4 +80,4 @@ function makeid() {
 }
 
 
-module.exports = {queryTable, addRecord, uploadFile, getContentForVenue, createIssue, createContent, makeid, starVenue};
+module.exports = {queryTable, addRecord, uploadFile, getContentForVenue, createIssue, createContent, makeid, starVenue, getVenuesByCategory};
