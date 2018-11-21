@@ -72,6 +72,7 @@ export class MapOverview extends React.Component {
           coordinate={marker.location}
           title={marker.name}
           image={image}
+          {...attrs}
           onPress={() => this.expandMarkerInfo(marker)}
         />
       );
@@ -113,7 +114,9 @@ export class MapOverview extends React.Component {
 
   onSaveMarker() {
     const { currentMarker, venues, familyMarkers, kindergartenMarkers, schuleMarkers } = this.state;
+    console.log(currentMarker);
     currentMarker.saved = true;
+    console.log(currentMarker);
     let foundMarker = false;
     familyMarkers.forEach(marker => {
       if (marker.name == currentMarker.name) {
@@ -185,13 +188,6 @@ export class MapOverview extends React.Component {
               {familyMarkers.length > 0 && this.getMarkers(familyMarkers, 'family')}
               {kindergartenMarkers.length > 0 && this.getMarkers(kindergartenMarkers, 'kindergarten')}
             </MapView>
-            {/*<MapView.Callout style={{ position: 'absolute', top: 0, right: 0}}>
-                  <View style={styles.calloutView}>
-                      <TextInput style={styles.calloutSearch}
-                          placeholder={'Search'}
-                      />
-                  </View>
-              </MapView.Callout>*/}
         </View>
         <View style={{ position: 'relative', height: actionButtonHeight }}>
           <ActionButton onPress={() => this.props.goToScreen(SCREENS.SubmitIssue)} />    
