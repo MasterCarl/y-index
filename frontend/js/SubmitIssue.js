@@ -117,8 +117,8 @@ export class SubmitIssue extends React.Component {
     return (
       <ScrollView ref={(scroller) => {this.scroller = scroller}} style={{ backgroundColor: COLORS.Background, height: '100%', width: '100%', }}>
         <View style={{ height: height, position: 'relative' }}>
-          <Text style={{ color: '#fff', fontSize: 34, fontWeight: 'bold', textAlign: 'left', marginLeft: 20, marginTop: 20}}>Submit Idea</Text>
-          <Text style={{ color: '#fff', fontSize: 18, fontWeight: 'bold', textAlign: 'left', marginLeft: 20, marginTop: 2}}>Describe your idea:</Text>
+          <Text style={{ fontSize: 34, fontWeight: 'bold', textAlign: 'left', marginLeft: 20, marginTop: 20}}>Submit Idea</Text>
+          <Text style={{ fontSize: 18, fontWeight: 'bold', textAlign: 'left', marginLeft: 20, marginTop: 2}}>Describe your idea:</Text>
           <TextInput
               style={{borderWidth: 1, backgroundColor: COLORS.TextInput, color: COLORS.Blue1, paddingLeft: 20, textAlignVertical: 'top'}}
               multiline={true}
@@ -127,7 +127,7 @@ export class SubmitIssue extends React.Component {
               placeholderTextColor={COLORS.Blue5}
               onChangeText={(text) => this.setState({ description: text})}
             />
-          <Text style={{ color: '#fff', marginTop: 20, fontSize: 18, fontWeight: 'bold', textAlign: 'left', marginLeft: 20, marginTop: 2}}>Select most appropriate topic:</Text>
+          <Text style={{ marginTop: 20, fontSize: 18, fontWeight: 'bold', textAlign: 'left', marginLeft: 20, marginTop: 2}}>Select most appropriate topic:</Text>
           <Carousel
             style={{ marginBottom: 0, height: 200 }}
             data={ENTRIES}
@@ -137,20 +137,20 @@ export class SubmitIssue extends React.Component {
             onSnapToItem={(index) => this.setState({ selectedTopic: ENTRIES[index].index }) }
           />
           <TouchableOpacity style={[styles.submitButton, { position: 'absolute', top: 520, width: '100%' }]} onPress={() => this.scroller.scrollTo({x: 0, y: height})}>
-            <Text style={{ color: '#fff', textAlign: 'center', fontSize: 18, paddingTop: 5}}>Continue</Text>
+            <Text style={{ textAlign: 'center', fontSize: 18, paddingTop: 5}}>Continue</Text>
           </TouchableOpacity>
         </View>
         <View style={{ height: height }}>
-          <Text style={{ color: '#fff', fontSize: 34, fontWeight: 'bold', textAlign: 'left', marginLeft: 20, marginTop: 20}}>
+          <Text style={{ fontSize: 34, fontWeight: 'bold', textAlign: 'left', marginLeft: 20, marginTop: 20}}>
             Add a photo
           </Text>
-          <Text style={{ color: '#fff', fontSize: 18, fontWeight: 'bold', textAlign: 'left', marginLeft: 20, marginTop: 2}}>
+          <Text style={{ fontSize: 18, fontWeight: 'bold', textAlign: 'left', marginLeft: 20, marginTop: 2}}>
             To illustrate your idea even better
           </Text>
           {imageSource !== null && <Image source={imageSource} style={[styles.photo]} resizeMode="contain" />}
           <TouchableOpacity style={[styles.submitButton, { marginTop: 100 }]} onPress={() => this.takePhoto()}>
             <Icon name="add-a-photo" size={20} color="#FFF" style={{ position: 'absolute', left: 50, top: 15 }} />
-            <Text style={{ color: '#fff', textAlign: 'center', fontSize: 18, paddingTop: 5}}>Take a phote and submit</Text>
+            <Text style={{ textAlign: 'center', fontSize: 18, paddingTop: 5}}>Take a phote and submit</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
