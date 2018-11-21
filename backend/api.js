@@ -25,6 +25,10 @@ function createContent(type, venue, picture_url, text, location) {
 		);
 }
 
+async function patchRecord(table, id, record) {
+	return await axios.patch(`http://mastercarl.com:3000/${table}?id=eq.${id}`, record).catch(console.error);
+}
+
 const createIssue = createContent.bind(this, 'issue');
 
 function addCommentToIssue(issueId, comment, author) {
@@ -50,4 +54,4 @@ async function uploadFile(name, data) {
 
 //uploadFile('test', require('fs').readFileSync('test.txt')).then(console.log);
 
-module.exports = {queryTable, addRecord, uploadFile, getContentForVenue, createIssue, createContent};
+module.exports = {queryTable, addRecord, uploadFile, getContentForVenue, createIssue, createContent, patchRecord};
